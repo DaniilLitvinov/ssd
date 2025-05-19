@@ -1,0 +1,373 @@
+/* Базовые стили */
+:root {
+    --primary: #2c3e50;
+    --secondary: #3498db;
+    --accent: #ffd700;
+    --text: #333;
+    --light: #f8f9fa;
+    --dark: #1a1a1a;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', Arial, sans-serif;
+    line-height: 1.6;
+    color: var(--text);
+    background: var(--light);
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    padding: 0 20px;
+    margin: 0 auto;
+}
+
+/* Шапка */
+.header {
+    background: linear-gradient(135deg, var(--primary) 0%, #1e3c72 100%);
+    color: white;
+    padding: 40px 0;
+    text-align: center;
+}
+
+.header__title {
+    font-size: 2.2rem;
+    margin-bottom: 15px;
+}
+
+.header__subtitle {
+    font-size: 1.2rem;
+}
+
+.header__subtitle span {
+    color: var(--accent);
+}
+
+/* Секции */
+section {
+    padding: 60px 0;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 2rem;
+    color: var(--primary);
+    position: relative;
+}
+
+.section-title::after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 4px;
+    background: var(--secondary);
+    margin: 15px auto 0;
+}
+
+/* Секция "О предпринимателе" */
+.about__content {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+}
+
+.about__photo {
+    flex: 0 0 300px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.about__img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.3s;
+}
+
+.about__img:hover {
+    transform: scale(1.03);
+}
+
+.about__text {
+    flex: 1;
+}
+
+.about__description {
+    font-size: 1.1rem;
+    margin-bottom: 25px;
+    line-height: 1.7;
+}
+
+.about__details {
+    background: var(--light);
+    padding: 25px;
+    border-radius: 8px;
+    border-left: 4px solid var(--secondary);
+}
+
+.about__details p {
+    margin: 10px 0;
+    padding-left: 10px;
+}
+
+/* Карточки услуг */
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.service-card {
+    background: white;
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s;
+}
+
+.service-card:hover {
+    transform: translateY(-10px);
+}
+
+.service-card h3 {
+    color: var(--primary);
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+}
+
+/* Реквизиты */
+.details-box {
+    background: white;
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table tr:not(:last-child) {
+    border-bottom: 1px solid #eee;
+}
+
+table td {
+    padding: 12px 15px;
+}
+
+table td:first-child {
+    font-weight: bold;
+    width: 40%;
+}
+
+/* Подвал */
+.footer {
+    background: var(--dark);
+    color: #aaa;
+    padding: 40px 0;
+    text-align: center;
+}
+
+.footer__contacts {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.footer__contacts p {
+    margin: 0;
+}
+
+.footer__contacts a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+.footer__contacts a:hover {
+    text-decoration: underline;
+}
+
+.footer__copyright {
+    font-size: 0.9rem;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .header__title {
+        font-size: 1.8rem;
+    }
+    
+    section {
+        padding: 40px 0;
+    }
+    
+    .service-card {
+        padding: 20px;
+    }
+
+    .about__content {
+        flex-direction: column;
+    }
+    
+    .about__photo {
+        flex: none;
+        width: 70%;
+        margin: 0 auto;
+    }
+    
+    .about__details {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .about__photo {
+        width: 100%;
+    }
+}
+
+/* Стили для формы и модальных окон */
+.feedback-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 30px;
+    border-radius: 8px;
+    position: relative;
+}
+
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--primary);
+}
+
+.feedback-form input,
+.feedback-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.feedback-form button {
+    background: var(--secondary);
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.feedback-form button:hover {
+    background: #2980b9;
+}
+
+#formMessage,
+#agreementMessage {
+    margin-top: 15px;
+    text-align: center;
+}
+
+/* Стиль для кнопки */
+.feedback-button {
+    width: 200px;
+    padding: 12px 25px;
+    background: var(--secondary);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.feedback-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+}
+
+/* Стили для модального окна согласия */
+#agreementModal .modal-content {
+    max-width: 600px;
+}
+
+#agreementModal h2 {
+    color: var(--primary);
+    margin-bottom: 20px;
+}
+
+#agreementModal p {
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+#agreementModal a {
+    color: var(--secondary);
+    text-decoration: none;
+}
+
+#agreementModal a:hover {
+    text-decoration: underline;
+}
+
+#agreementModal label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 1rem;
+}
+
+#agreementModal input[type="checkbox"] {
+    margin-right: 10px;
+    width: 20px;
+    height: 20px;
+}
+
+#agreementConfirm {
+    background: var(--secondary);
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+#agreementConfirm:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+#agreementConfirm:hover:not(:disabled) {
+    background: #2980b9;
+}
