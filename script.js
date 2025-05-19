@@ -73,22 +73,40 @@ agreementConfirmBtn.addEventListener('click', () => {
     }
 });
 
-// Обработка формы обратной связи
+// Обработка формы обратной связи с последовательными ID
 document.getElementById('feedbackForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     
     const formData = {
         name: document.getElementById('feedbackName').value.trim(),
         email: document.getElementById('feedbackEmail').value.trim(),
-        message: document.getElementById('feedbackMessage').value.trim()
+        message: document.getElementById('feedbackMessage').value.trim(),
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
     };
 
     try {
-        await db.collection('feedback').add({
-            ...formData,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        // Используем транзакцию для получения и обновления счетчика
+        const counterRef = db.collection('metadata').doc('feedbackCounter');
+        await db.runTransaction(async (transaction) => {
+            const counterDoc = await transaction.get(counterRef);
+            let currentCount = 0;
+
+            if (!counterDoc.exists) {
+                // Если документ счетчика не существует, инициализируем его
+                transaction.set(counterRef, { count: 1 });
+            } else {
+                // Получаем текущий счетчик и увеличиваем его
+                currentCount = counterDoc.data().count;
+                transaction.update(counterRef, { count: currentCount + 1 });
+            }
+
+            // Генерируем ID вида "1record", "2record" и т.д.
+            const newRecordId = `${currentCount + 1}record`;
+
+            // Сохраняем документ с пользовательским ID
+            transaction.set(db.collection('feedback').doc(newRecordId), formData);
         });
-        
+
         showFormMessage('Сообщение успешно отправлено!', 'green');
         e.target.reset();
         setTimeout(hideFeedbackModal, 1500);
@@ -108,3 +126,31 @@ function showAgreementMessage(text, color) {
     messageDiv.innerHTML = `<p style="color: ${color};">${text}</p>`;
     setTimeout(() => messageDiv.innerHTML = '', 3000);
 }
+
+// Пример: Получение и отображение записей, отсортированных по времени (новые первыми)
+function fetchFeedbackSortedByTime() {
+    db.collection('feedback')
+        .orderBy('createdAt', 'desc')
+        .get()
+        .then((querySnapshot) => {
+            const feedbackList = [];
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                feedbackList.push({
+                    id: doc.id,
+                    name: data.name,
+                    email: data.email,
+                    message: data.message,
+                    createdAt: data.createdAt ? data.createdAt.toDate().toLocaleString('ru-RU') : 'Нет даты'
+                });
+            });
+            console.log('Отсортированные записи:', feedbackList);
+            // Здесь можно добавить код для отображения записей на странице
+        })
+        .catch((error) => {
+            console.error('Ошибка при получении записей:', error);
+        });
+}
+
+// Вызов функции для тестирования (можно закомментировать в продакшене)
+fetchFeedbackSortedByTime();
