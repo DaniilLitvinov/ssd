@@ -1,0 +1,172 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ИП Выборный Виталий Витальевич</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1 class="header__title">ИП Выборный Виталий Витальевич</h1>
+            <p class="header__subtitle">Деятельность рекламных агентств с <span>2021</span> года</p>
+        </div>
+    </header>
+
+    <main>
+        <section id="about" class="about">
+            <div class="container">
+                <h2 class="section-title">О предпринимателе</h2>
+                <div class="about__content">
+                    <div class="about__photo">
+                        <img src="https://via.placeholder.com/300" alt="Фото предпринимателя" class="about__img">
+                    </div>
+                    <div class="about__text">
+                        <p class="about__description">
+                            Индивидуальный предприниматель Выборный Виталий Витальевич 
+                            успешно ведет деятельность в сфере рекламы с 17 июня 2021 года. 
+                            Официальная регистрация осуществлена в Ростовской области.
+                        </p>
+                        <div class="about__details">
+                            <p>▸ Налоговый орган: Инспекция ФНС по Октябрьскому району г. Ростова-на-Дону</p>
+                            <p>▸ Основной ОКВЭД: 73.11 - Деятельность рекламных агентств</p>
+                            <p>▸ Специализация: комплексные рекламные решения для бизнеса</p>
+                            <p>▸ Опыт работы в маркетинге: более 5 лет</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="services" class="services">
+            <div class="container">
+                <h2 class="section-title">Направления деятельности</h2>
+                <div class="services-grid">
+                    <div class="service-card">
+                        <h3>Рекламные агентства</h3>
+                        <p>Разработка и реализация рекламных кампаний, медиапланирование, брендинг</p>
+                    </div>
+                    <div class="service-card">
+                        <h3>Digital-маркетинг</h3>
+                        <p>SMM, контекстная реклама, SEO-продвижение, таргетированная реклама</p>
+                    </div>
+                    <div class="service-card">
+                        <h3>Веб-разработка</h3>
+                        <p>Создание сайтов, интернет-магазинов, корпоративных порталов</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="details" class="details">
+            <div class="container">
+                <h2 class="section-title">Реквизиты</h2>
+                <div class="details-box">
+                    <table>
+                        <tr><td>ОГРНИП:</td><td>321619600121671</td></tr>
+                        <tr><td>ИНН:</td><td>616807486720</td></tr>
+                        <tr><td>Рег. номер ПФР:</td><td>1314579051</td></tr>
+                        <tr><td>Дата регистрации:</td><td>17.06.2021</td></tr>
+                        <tr><td>Статус:</td><td>Действующий</td></tr>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__contacts">
+                <button class="feedback-button">Форма обратной связи</button>
+                <p>Телефон: <a href="tel:+79280000000">+7 (928) 000-00-00</a></p>
+                <p>Email: <a href="mailto:frec82@gmail.com">frec82@gmail.com</a></p>
+            </div>
+            <p class="footer__copyright">© 2025 ИП Выборный В.В. Все права защищены</p>
+        </div>
+    </footer>
+
+    <!-- Модальное окно для согласия -->
+    <div id="agreementModal" class="feedback-modal">
+        <div class="modal-content">
+            <span class="close-btn">×</span>
+            <h2>Согласие на обработку персональных данных</h2>
+            <p>Перед отправкой формы, пожалуйста, подтвердите свое согласие на обработку персональных данных в соответствии с <a href="agreement.html" target="_blank">Политикой обработки персональных данных</a>.</p>
+            <label>
+                <input type="checkbox" id="agreementCheckbox">
+                Я согласен с условиями обработки персональных данных
+            </label>
+            <button id="agreementConfirm" disabled>Подтвердить</button>
+            <div id="agreementMessage"></div>
+        </div>
+    </div>
+
+    <!-- Модальное окно формы обратной связи -->
+    <div id="feedbackModal" class="feedback-modal">
+        <div class="modal-content">
+            <span class="close-btn">×</span>
+            <h2>Обратная связь</h2>
+            <form id="feedbackForm" class="feedback-form">
+                <div class="form-group">
+                    <label for="feedbackName">Ваше имя</label>
+                    <input type="text" id="feedbackName" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="feedbackEmail">Ваш email</label>
+                    <input type="email" id="feedbackEmail" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="feedbackMessage">Ваше сообщение</label>
+                    <textarea id="feedbackMessage" name="message" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="form-submit-btn">Отправить</button>
+            </form>
+            <div id="formMessage"></div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
