@@ -144,13 +144,11 @@ function fetchFeedbackSortedByTime() {
                     createdAt: data.createdAt ? data.createdAt.toDate().toLocaleString('ru-RU') : 'Нет даты'
                 });
             });
-            console.log('Отсортированные записи:', feedbackList);
-            // Здесь можно добавить код для отображения записей на странице
+
         })
         .catch((error) => {
             console.error('Ошибка при получении записей:', error);
         });
 }
 
-// Вызов функции для тестирования (можно закомментировать в продакшене)
-fetchFeedbackSortedByTime();
+
